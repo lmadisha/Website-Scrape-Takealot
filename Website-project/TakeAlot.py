@@ -7,6 +7,8 @@ import time
 import lxml
 import csv
 
+# <--------------------------------------------Setting up webdriver ------------------------------------------------------------->
+
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("start-maximized")
@@ -15,11 +17,15 @@ driver = webdriver.Chrome(options=chrome_options)
 
 driver.get("https://www.takealot.com/")
 
+#<--------------------------------------------- Searching up the product-------------------------------------------------------->
+
 search = driver.find_element(By.XPATH, '//*[@id="shopfront-app"]/header/div/div/div[2]/form/div[1]/div[1]/input')
 name_product = input('Enter a product or service: ')
 search.send_keys(name_product)
 search.send_keys(Keys.ENTER)
 time.sleep(5)
+
+#<--------------------------------------------- Getting all the products links--------------------------------------------------->
 
 list_of_items = driver.find_elements(By.CSS_SELECTOR, 'div.search-product.grid a')
 
@@ -37,6 +43,8 @@ for link in items_link:
 links = list(OrderedDict.fromkeys(items_links))
 
 driver.close()
+
+#<--------------------------------------------- Getting all the information of the products----------------------------------------->
 
 information = []
 
@@ -63,7 +71,7 @@ for l in links:
         for column in columns:
             output_row.append(column.text)
         table_data.append(output_row)
-    barcode = table_data[len(table_data)-1][1]
+    barcode = table_data[len(table_data) - 1][1]
     product_info = table_data
 
     info_dic = {
@@ -77,6 +85,8 @@ for l in links:
     information.append(info_dic)
 
     driver1.close()
+
+#<--------------------------------------------- CSV ------------------------------------------------------------------------------>
 
 fields = ['Name', 'Price', 'Barcode', 'Link', 'Product Information']
 filename = f"{name_product}.csv"
