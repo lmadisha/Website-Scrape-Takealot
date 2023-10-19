@@ -48,10 +48,11 @@ driver.close()
 
 information = []
 
+driver1 = webdriver.Chrome(options=chrome_options)
+
 for l in links:
-    driver1 = webdriver.Chrome(options=chrome_options)
     driver1.get(l)
-    time.sleep(5)
+    time.sleep(1.5)
     name = driver1.find_element(By.CSS_SELECTOR, "div.product-title h1").text
     price = driver1.find_element(By.CSS_SELECTOR, 'div.buybox-module_price_2YUFa span').text
 
@@ -62,7 +63,7 @@ for l in links:
     # description = description[1:]
 
     table = driver1.find_element(By.CSS_SELECTOR, 'div.product-info table')
-    time.sleep(5)
+    time.sleep(2.5)
     soup = BeautifulSoup(table.get_attribute('outerHTML'), "lxml")
     table_data = []
     for row in soup.find_all('tr'):
@@ -76,7 +77,7 @@ for l in links:
 
     info_dic = {
         'Name': name,
-        'Price': price,
+        'Price': float((price[2:]).replace(",", "")),
         'Barcode': barcode,
         'Link': l,
         'Product Information': product_info,
@@ -84,9 +85,11 @@ for l in links:
 
     information.append(info_dic)
 
-    driver1.close()
+driver1.close()
 
 #<--------------------------------------------- CSV ------------------------------------------------------------------------------>
+import pandas as pandasForSortingCSV
+
 
 fields = ['Name', 'Price', 'Barcode', 'Link', 'Product Information']
 filename = f"{name_product}.csv"
@@ -95,3 +98,10 @@ with open(filename, "wt") as file:
     writer = csv.DictWriter(file, fieldnames=fields)
     writer.writeheader()
     writer.writerows(information)
+
+csvData = pandasForSortingCSV.read_csv(filename)
+csvData.sort_values(["Price"],
+                    axis=0,
+                    ascending=[True],
+                    inplace=True)
+print(csvData)
