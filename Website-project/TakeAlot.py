@@ -52,9 +52,12 @@ driver1 = webdriver.Chrome(options=chrome_options)
 
 for l in links:
     driver1.get(l)
-    time.sleep(1.5)
+    time.sleep(3)
     name = driver1.find_element(By.CSS_SELECTOR, "div.product-title h1").text
     price = driver1.find_element(By.CSS_SELECTOR, 'div.buybox-module_price_2YUFa span').text
+
+    price = (price[2:]).replace(",", "")
+    price = float(price)
 
     # descriptions = driver1.find_elements(By.CSS_SELECTOR, 'div.product-description p')
     # description = []
@@ -72,7 +75,11 @@ for l in links:
         for column in columns:
             output_row.append(column.text)
         table_data.append(output_row)
-    barcode = table_data[len(table_data) - 1][1]
+
+    if (table_data[len(table_data) - 1]) == 'Barcode':
+        barcode = table_data[len(table_data) - 1][1]
+    else:
+        barcode = 'No barcode'
     product_info = table_data
 
     info_dic = {
@@ -88,20 +95,24 @@ for l in links:
 driver1.close()
 
 #<--------------------------------------------- CSV ------------------------------------------------------------------------------>
-import pandas as pandasForSortingCSV
+# import pandas as pandasForSortingCSV
 
 
 fields = ['Name', 'Price', 'Barcode', 'Link', 'Product Information']
 filename = f"{name_product}.csv"
 
+information_dict = sorted(information, key=lambda x: x['Price'])
+# print(information_dict)
+
 with open(filename, "wt") as file:
     writer = csv.DictWriter(file, fieldnames=fields)
     writer.writeheader()
-    writer.writerows(information)
+    writer.writerows(information_dict)
 
-csvData = pandasForSortingCSV.read_csv(filename)
-csvData.sort_values(["Price"],
-                    axis=0,
-                    ascending=[True],
-                    inplace=True)
-print(csvData)
+# csvData = pandasForSortingCSV.read_csv(filename)
+# csvData.sort_values(["Price"],
+#                     axis=0,
+#                     ascending=[True],
+#                     inplace=True)
+#
+# print(csvData['Name']['Price'])
