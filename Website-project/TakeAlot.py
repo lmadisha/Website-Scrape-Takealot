@@ -69,6 +69,7 @@ for l in links:
     time.sleep(2.5)
     soup = BeautifulSoup(table.get_attribute('outerHTML'), "lxml")
     table_data = []
+    time.sleep(2.5)
     for row in soup.find_all('tr'):
         columns = row.find_all('td')
         output_row = []
@@ -84,7 +85,7 @@ for l in links:
 
     info_dic = {
         'Name': name,
-        'Price': float((price[2:]).replace(",", "")),
+        'Price': float(((price[2:]).replace(",", ""))),
         'Barcode': barcode,
         'Link': l,
         'Product Information': product_info,
