@@ -77,7 +77,7 @@ for l in links:
 
     info_dic = {
         'Name': name,
-        'Price': float((price[2:]).replace(",", "")),
+        'Price': price,
         'Barcode': barcode,
         'Link': l,
         'Product Information': product_info,
