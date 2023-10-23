@@ -54,10 +54,9 @@ for l in links:
     driver1.get(l)
     time.sleep(3)
     name = driver1.find_element(By.CSS_SELECTOR, "div.product-title h1").text
-    price = driver1.find_element(By.CSS_SELECTOR, 'div.buybox-module_price_2YUFa span').text
+    price = driver1.find_element(By.CSS_SELECTOR, 'span.currency.plus.currency-module_currency_29IIm').text
 
-    price = (price[2:]).replace(",", "")
-    price = float(price)
+    # price = float((price[2:]).replace(",", ""))
 
     # descriptions = driver1.find_elements(By.CSS_SELECTOR, 'div.product-description p')
     # description = []
@@ -77,15 +76,16 @@ for l in links:
             output_row.append(column.text)
         table_data.append(output_row)
 
-    if (table_data[len(table_data) - 1]) == 'Barcode':
+    if (table_data[len(table_data) - 1][0]) == 'Barcode':
         barcode = table_data[len(table_data) - 1][1]
     else:
         barcode = 'No barcode'
+
     product_info = table_data
 
     info_dic = {
         'Name': name,
-        'Price': float(((price[2:]).replace(",", ""))),
+        'Price': float((price[2:]).replace(",", "")),
         'Barcode': barcode,
         'Link': l,
         'Product Information': product_info,
