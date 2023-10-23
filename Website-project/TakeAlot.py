@@ -1,4 +1,6 @@
 from collections import OrderedDict
+
+import selenium.common.exceptions
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -64,24 +66,29 @@ for l in links:
     #     description.append(x.text)
     # description = description[1:]
 
-    table = driver1.find_element(By.CSS_SELECTOR, 'div.product-info table')
-    time.sleep(2.5)
-    soup = BeautifulSoup(table.get_attribute('outerHTML'), "lxml")
-    table_data = []
-    time.sleep(2.5)
-    for row in soup.find_all('tr'):
-        columns = row.find_all('td')
-        output_row = []
-        for column in columns:
-            output_row.append(column.text)
-        table_data.append(output_row)
-
-    if (table_data[len(table_data) - 1][0]) == 'Barcode':
-        barcode = table_data[len(table_data) - 1][1]
-    else:
+    try:
+        table = driver1.find_element(By.CSS_SELECTOR, 'div.product-info table')
+        time.sleep(2.5)
+    except selenium.common.exceptions.NoSuchElementException:
         barcode = 'No barcode'
+        product_info = 'No product information yet!!'
+    else:
+        soup = BeautifulSoup(table.get_attribute('outerHTML'), "lxml")
+        table_data = []
+        time.sleep(2.5)
+        for row in soup.find_all('tr'):
+            columns = row.find_all('td')
+            output_row = []
+            for column in columns:
+                output_row.append(column.text)
+            table_data.append(output_row)
 
-    product_info = table_data
+        if (table_data[len(table_data) - 1][0]) == 'Barcode':
+            barcode = table_data[len(table_data) - 1][1]
+        else:
+            barcode = 'No barcode'
+
+        product_info = table_data
 
     info_dic = {
         'Name': name,
