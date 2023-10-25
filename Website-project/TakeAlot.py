@@ -56,7 +56,7 @@ for l in links:
     driver1.get(l)
     time.sleep(3)
     name = driver1.find_element(By.CSS_SELECTOR, "div.product-title h1").text
-    price = driver1.find_element(By.CSS_SELECTOR, 'span.currency.plus.currency-module_currency_29IIm').text
+    price = driver1.find_element(By.CSS_SELECTOR, 'div.pdp-module_sidebar-buybox_1m6Sm span.currency.plus.currency-module_currency_29IIm').text
 
     # price = float((price[2:]).replace(",", ""))
 
@@ -107,12 +107,12 @@ driver1.close()
 
 
 fields = ['Name', 'Price', 'Barcode', 'Link', 'Product Information']
-filename = f"{name_product}.csv"
+filename = f"{name_product.replace(' ', '')}.csv"
 
 information_dict = sorted(information, key=lambda x: x['Price'])
 # print(information_dict)
 
-with open(filename, "wt") as file:
+with open(filename, "wt", encoding='utf-8') as file:
     writer = csv.DictWriter(file, fieldnames=fields)
     writer.writeheader()
     writer.writerows(information_dict)
