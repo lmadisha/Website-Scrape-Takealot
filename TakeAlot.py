@@ -107,6 +107,7 @@ driver1.close()
 
 
 fields = ['Name', 'Price', 'Barcode', 'Link', 'Product Information']
+
 filename = f"{name_product.replace(' ', '')}.csv"
 
 information_dict = sorted(information, key=lambda x: x['Price'])
