@@ -34,6 +34,7 @@
 <p>To use the python script:</p>
 <h3>Running the project with python in repository folder</h3>
 <code lang="bash">python3 TakeAlot.py</code>
+<p style="color:red;">If this does not work, please use an IDE or VScode. </p>
 <p>Then enter the item you want to search; then it will pop up in a folder called products with the items in a csv.</p>
 </div>
 <h2>This was the beginning of many projects!!</h2>
