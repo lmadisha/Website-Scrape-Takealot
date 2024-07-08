@@ -21,7 +21,8 @@ driver.get("https://www.takealot.com/")
 
 #<--------------------------------------------- Searching up the product-------------------------------------------------------->
 
-search = driver.find_element(By.XPATH, '//*[@id="shopfront-app"]/header/div/div/div[2]/form/div[1]/div[1]/input')
+time.sleep(1)
+search = driver.find_element(By.XPATH, '/html/body/div[1]/header/div/div/div[2]/form/div[1]/div[1]/input')
 name_product = input('Enter a product or service: ').strip().lower()
 search.send_keys(name_product)
 search.send_keys(Keys.ENTER)
@@ -112,3 +113,5 @@ with open(filename, "wt", encoding='utf-8') as file:
     writer = csv.DictWriter(file, fieldnames=fields)
     writer.writeheader()
     writer.writerows(information_dict)
+
+os.system(f"xdg-open products/{filename}")
